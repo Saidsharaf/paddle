@@ -12,55 +12,52 @@ class HomeLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     int index = 0;
     int count = 0;
-    return BlocProvider(
-      create: (context) => HomeLayoutCubit(),
-      child: BlocConsumer<HomeLayoutCubit, HomeLayoutStates>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          var cubit = HomeLayoutCubit.get(context);
-          if (index != 0 && count == 0) {
-            cubit.currentIndex = index;
-            count++;
-          }
-          return ConditionalBuilder(
-            condition: true,
-            builder: (context) => Scaffold(
-              extendBody: true,
-              //backgroundColor: Colors.grey[100],
-              appBar: AppBar(
-                actions: [
-                  IconButton(
-                      onPressed: () {
-                      //  navigate(context, Search());
-                      },
-                      icon: Icon(Icons.search)),
-                  SizedBox(
-                    width: 12,
-                  ),
-                ],
-                title: Text(cubit.title[cubit.currentIndex]),
-                centerTitle: true,
-                //backgroundColor: Colors.blueAccent,
-              ),
-              
-              body: cubit.screens[cubit.currentIndex],
-              bottomNavigationBar: CurvedNavigationBar(
-                color: Color.fromARGB(255, 0, 151, 178),
-                height: 50,
-                animationCurve: Easing.linear,
-                backgroundColor: Colors.transparent,
-                animationDuration: Duration(milliseconds: 500),
-                items: cubit.itemIcons,
-                index: cubit.currentIndex,
-                onTap: (value) {
-                  cubit.changeNav(value);
-                },
-              ),
+    return BlocConsumer<PaddleCubit, PaddleStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        var cubit = PaddleCubit.get(context);
+        if (index != 0 && count == 0) {
+          cubit.currentIndex = index;
+          count++;
+        }
+        return ConditionalBuilder(
+          condition: true,
+          builder: (context) => Scaffold(
+            extendBody: true,
+            //backgroundColor: Colors.grey[100],
+            appBar: AppBar(
+              actions: [
+                IconButton(
+                    onPressed: () {
+                    //  navigate(context, Search());
+                    },
+                    icon: Icon(Icons.search)),
+                SizedBox(
+                  width: 12,
+                ),
+              ],
+              title: Text(cubit.title[cubit.currentIndex]),
+              centerTitle: true,
+              //backgroundColor: Colors.blueAccent,
             ),
-            fallback: (context) => Center(child: CircularProgressIndicator()),
-          );
-        },
-      ),
+            
+            body: cubit.screens[cubit.currentIndex],
+            bottomNavigationBar: CurvedNavigationBar(
+              color: Color.fromARGB(255, 0, 151, 178),
+              height: 50,
+              animationCurve: Easing.linear,
+              backgroundColor: Colors.transparent,
+              animationDuration: Duration(milliseconds: 500),
+              items: cubit.itemIcons,
+              index: cubit.currentIndex,
+              onTap: (value) {
+                cubit.changeNav(value);
+              },
+            ),
+          ),
+          fallback: (context) => Center(child: CircularProgressIndicator()),
+        );
+      },
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:defi/modules/loginAndRegister/cubitLogin/cubit.dart';
 import 'package:defi/modules/loginAndRegister/cubitLogin/state.dart';
 import 'package:defi/modules/loginAndRegister/register.dart';
 import 'package:defi/shared/component/component.dart';
+import 'package:defi/shared/network/local/sharedPref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart' as gett;
@@ -22,7 +23,9 @@ class LoginScreen extends StatelessWidget {
           if (state is loginErrorState) {
             showToast(msg: state.error, state: toastStates.ERROR);
           } else if (state is loginSuccessState) {
+            sharedPref.saveData(key: "uId", value: state.uId).then((value) {
             navigateAndFinish(context, HomeLayout());
+            });
           }
         },
         builder: (context, state) {

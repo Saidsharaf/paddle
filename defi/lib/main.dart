@@ -1,76 +1,105 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:defi/layout/cubitHome/cubit_home.dart';
+import 'package:defi/layout/cubitHome/state_home.dart';
+import 'package:defi/layout/home_layout.dart';
 import 'package:defi/modules/loginAndRegister/login.dart';
+import 'package:defi/shared/component/constants.dart';
+import 'package:defi/shared/network/local/sharedPref.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await sharedPref.init();
+  Widget? widget;
+  uId = sharedPref.getData(key: "uId");
 
-  runApp(const MyApp());
+  if (uId != null) {
+    widget = HomeLayout();
+  } else {
+    widget = LoginScreen();
+  }
+
+  runApp(
+    MyApp(
+      startWidget: widget,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
+  final Widget? startWidget;
   const MyApp({
     super.key,
+    this.startWidget,
   });
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color.fromARGB(255, 0, 151, 178),
-        ),
-        //primarySwatch: Color.fromARGB(255, 0, 151, 178),
-        // scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(
-          iconTheme: const IconThemeData(
-            color: Colors.black,
-          ),
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Colors.grey[100],
-            statusBarIconBrightness: Brightness.dark,
-          ),
-          backgroundColor: Colors.grey[100],
-          elevation: 0,
-          titleTextStyle: const TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Color.fromARGB(255, 0, 151, 178),
-        ),
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 13.0,
-            color: Colors.black,
-          ),
-        ),
-        primaryColor: Color.fromARGB(255, 0, 151, 178),
-        cardColor: Color.fromARGB(255, 0, 151, 178),
-      ),
-      home: AnimatedSplashScreen(
-        backgroundColor: Color.fromARGB(255, 0, 151, 178),
-        splash: CircleAvatar(
-          backgroundImage: AssetImage(
-            "assets/images/logosplach.png",
-          ),
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
-          radius: 70,
-        ),
-        splashIconSize: 200,
-        splashTransition: SplashTransition.scaleTransition,
-        duration: 1000,
-        nextScreen: LoginScreen(),
+    return BlocProvider(
+      create: (context) => PaddleCubit()..getUser(),
+      child: BlocConsumer<PaddleCubit, PaddleStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          return GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              floatingActionButtonTheme: const FloatingActionButtonThemeData(
+                backgroundColor: Color.fromARGB(255, 0, 151, 178),
+              ),
+              //primarySwatch: Color.fromARGB(255, 0, 151, 178),
+              // scaffoldBackgroundColor: Colors.white,
+              appBarTheme: AppBarTheme(
+                iconTheme: const IconThemeData(
+                  color: Colors.black,
+                ),
+                systemOverlayStyle: SystemUiOverlayStyle(
+                  statusBarColor: Colors.grey[100],
+                  statusBarIconBrightness: Brightness.dark,
+                ),
+                backgroundColor: Colors.grey[100],
+                elevation: 0,
+                titleTextStyle: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: Color.fromARGB(255, 0, 151, 178),
+              ),
+              textTheme: const TextTheme(
+                bodyLarge: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 13.0,
+                  color: Colors.black,
+                ),
+              ),
+              primaryColor: Color.fromARGB(255, 0, 151, 178),
+              cardColor: Color.fromARGB(255, 0, 151, 178),
+            ),
+            home: AnimatedSplashScreen(
+              backgroundColor: Color.fromARGB(255, 0, 151, 178),
+              splash: CircleAvatar(
+                backgroundImage: AssetImage(
+                  "assets/images/logosplach.png",
+                ),
+                backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                radius: 70,
+              ),
+              splashIconSize: 200,
+              splashTransition: SplashTransition.scaleTransition,
+              duration: 1000,
+              nextScreen: startWidget!,
+            ),
+          );
+        },
       ),
     );
   }

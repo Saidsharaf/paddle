@@ -1,5 +1,10 @@
-abstract class HomeLayoutStates {}
+abstract class PaddleStates {}
 
-class homeLayoutInitialState extends HomeLayoutStates {}
-
-class homeLayoutChangeBottomNavState extends HomeLayoutStates {}
+class paddleInitialState extends PaddleStates {}
+class paddleLoadingState extends PaddleStates {}
+class paddleSuccessState extends PaddleStates {}
+class paddleErrorState extends PaddleStates {
+  final String error;
+  paddleErrorState(this.error);
+}
+class paddleChangeBottomNavState extends PaddleStates {}
