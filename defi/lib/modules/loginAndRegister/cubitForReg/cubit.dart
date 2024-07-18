@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:defi/models/usersModel/UsersModel.dart';
 import 'package:defi/modules/loginAndRegister/cubitForReg/state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +11,9 @@ class RegisterCubit extends Cubit<RegisterStates> {
   static RegisterCubit get(context) => BlocProvider.of(context);
 
   void userRegister({
+    @required String? username,
     @required String? email,
     @required String? password,
-    //  @required String? username,
   }) {
     emit(registerLoadingState());
     FirebaseAuth.instance
@@ -21,9 +23,32 @@ class RegisterCubit extends Cubit<RegisterStates> {
     )
         .then((value) {
       print(value.user!.email);
+      userCreate(username: username, email: email, uId: value.user!.uid);
       emit(registerSuccessState());
     }).catchError((err) {
       emit(registerErrorState(err.toString()));
+    });
+  }
+
+  void userCreate({
+    @required String? username,
+    @required String? email,
+    @required String? uId,
+  }) {
+    emit(registerLoadingState());
+    UsersModel usersModel = UsersModel(
+      email: email,
+      name: username,
+      uId: uId,
+    );
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(uId)
+        .set(usersModel.toMap())
+        .then((value) {
+      emit(registerCreateSuccessState());
+    }).catchError((error) {
+      emit(registerCreateErrorState(error.toString()));
     });
   }
 
@@ -32,6 +57,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
     ispassword = !ispassword;
     emit(registerChangeShowPassState());
   }
+
   bool isConPassword = true;
   void changeConPass() {
     isConPassword = !isConPassword;

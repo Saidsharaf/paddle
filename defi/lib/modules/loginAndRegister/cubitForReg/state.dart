@@ -16,3 +16,10 @@ class registerErrorState extends RegisterStates {
   final String error;
   registerErrorState(this.error);
 }
+class registerCreateSuccessState extends RegisterStates {
+}
+
+class registerCreateErrorState extends RegisterStates {
+  final String error;
+  registerCreateErrorState(this.error);
+}
