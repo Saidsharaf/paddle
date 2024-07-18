@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "681406014107",
+    "project_id": "paddle-76841",
+    "storage_bucket": "paddle-76841.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681406014107:android:d6b7b8255d591216ed9c3e",
+        "android_client_info": {
+          "package_name": "com.example.defi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmpBxbMmiNq1BgutobThE6DbjNTw50wQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
