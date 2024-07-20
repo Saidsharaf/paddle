@@ -2,6 +2,9 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:defi/layout/cubitHome/cubit_home.dart';
 import 'package:defi/layout/cubitHome/state_home.dart';
+import 'package:defi/modules/loginAndRegister/login.dart';
+import 'package:defi/shared/component/component.dart';
+import 'package:defi/shared/network/local/sharedPref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,7 +32,10 @@ class HomeLayout extends StatelessWidget {
               actions: [
                 IconButton(
                     onPressed: () {
-                    //  navigate(context, Search());
+                      //  navigate(context, Search());
+                      sharedPref.removeData(key: "uId").then((value) {
+                        navigateAndFinish(context, LoginScreen());
+                      });
                     },
                     icon: Icon(Icons.search)),
                 SizedBox(
@@ -40,7 +46,7 @@ class HomeLayout extends StatelessWidget {
               centerTitle: true,
               //backgroundColor: Colors.blueAccent,
             ),
-            
+
             body: cubit.screens[cubit.currentIndex],
             bottomNavigationBar: CurvedNavigationBar(
               color: Color.fromARGB(255, 0, 151, 178),

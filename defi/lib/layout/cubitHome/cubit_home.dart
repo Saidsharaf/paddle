@@ -52,8 +52,9 @@ class PaddleCubit extends Cubit<PaddleStates> {
   void getUser() {
     emit(paddleLoadingState());
     FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) {
-      //print(value.data());
+      print("***************");
       usersModel = UsersModel.fromJson(value.data()!);
+      print("******");
       emit(paddleSuccessState());
     }).catchError((err) {
       emit(paddleErrorState(err));

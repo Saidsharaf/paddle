@@ -1,5 +1,4 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:defi/layout/home_layout.dart';
 import 'package:defi/modules/loginAndRegister/cubitForReg/cubit.dart';
 import 'package:defi/modules/loginAndRegister/cubitForReg/state.dart';
 import 'package:defi/modules/loginAndRegister/login.dart';
@@ -22,8 +21,9 @@ class Register extends StatelessWidget {
       create: (context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterStates>(
         listener: (context, state) {
-          if(state is registerCreateSuccessState){
-            navigateAndFinish(context, HomeLayout());
+          if (state is registerCreateSuccessState) {
+            showToast(msg: "Successful login!", state: toastStates.SUCCESS);
+            navigateAndFinish(context, LoginScreen());
           }
         },
         builder: (context, state) {
