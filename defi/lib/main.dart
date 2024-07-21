@@ -4,6 +4,7 @@ import 'package:defi/layout/cubitHome/state_home.dart';
 import 'package:defi/layout/home_layout.dart';
 import 'package:defi/modules/loginAndRegister/login.dart';
 import 'package:defi/shared/component/constants.dart';
+import 'package:defi/shared/component/theme.dart';
 import 'package:defi/shared/network/local/sharedPref.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +85,8 @@ class MyApp extends StatelessWidget {
               primaryColor: Color.fromARGB(255, 0, 151, 178),
               cardColor: Color.fromARGB(255, 0, 151, 178),
             ),
+            darkTheme: darkMode,
+            themeMode: ThemeMode.dark,
             home: AnimatedSplashScreen(
               backgroundColor: Color.fromARGB(255, 0, 151, 178),
               splash: CircleAvatar(

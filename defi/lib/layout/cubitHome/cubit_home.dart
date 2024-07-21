@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:defi/layout/cubitHome/state_home.dart';
 import 'package:defi/models/usersModel/UsersModel.dart';
+import 'package:defi/modules/calls/calls.dart';
 import 'package:defi/modules/chat/chat.dart';
 import 'package:defi/modules/home/home.dart';
 import 'package:defi/modules/profile/profile.dart';
@@ -15,7 +16,7 @@ class PaddleCubit extends Cubit<PaddleStates> {
 
   int currentIndex = 0;
 
-  List<Widget> screens = [Home(), Chat(), Profile(), Setting()];
+  List<Widget> screens = [Home(),Challange(), Calls(),Chat(),Setting()];
   void changeNav(int value) {
     currentIndex = value;
     emit(paddleChangeBottomNavState());
@@ -23,22 +24,27 @@ class PaddleCubit extends Cubit<PaddleStates> {
 
   List<String> title = [
     "Home",
+    "challange",
+    "Calls",
     "Chat",
-    "Profile",
     "Setting",
   ];
 
   List<Icon> itemIcons = [
     Icon(
-      Icons.home,
+      Icons.app_registration,
+      color: Colors.white,
+    ),
+    Icon(
+      Icons.price_check,
+      color: Colors.white,
+    ),
+    Icon(
+      Icons.perm_phone_msg_outlined,
       color: Colors.white,
     ),
     Icon(
       Icons.chat,
-      color: Colors.white,
-    ),
-    Icon(
-      Icons.person,
       color: Colors.white,
     ),
     Icon(

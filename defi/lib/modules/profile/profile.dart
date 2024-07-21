@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
+class Challange extends StatelessWidget {
+  const Challange({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Text("Profile"),
+        child: Text("Challange"),
     );
   }
 }

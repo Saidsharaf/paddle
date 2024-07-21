@@ -6,7 +6,10 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("home"),
+      child: Text(
+        "home",
+        style: Theme.of(context).textTheme.bodyLarge,
+      ),
     );
   }
 }

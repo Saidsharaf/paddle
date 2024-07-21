@@ -5,8 +5,13 @@ class Chat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Text("Chat"),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          
+        ),
+      ],
     );
   }
 }
