@@ -7,6 +7,7 @@ import 'package:defi/modules/home/home.dart';
 import 'package:defi/modules/profile/profile.dart';
 import 'package:defi/modules/setting/setting.dart';
 import 'package:defi/shared/component/constants.dart';
+import 'package:defi/shared/network/local/sharedPref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,14 +17,14 @@ class PaddleCubit extends Cubit<PaddleStates> {
 
   int currentIndex = 0;
 
-  List<Widget> screens = [Home(),Challange(), Calls(),Chat(),Setting()];
+  List<Widget> screens = [Home(), Challange(), Calls(), Chat(), Setting()];
   void changeNav(int value) {
     currentIndex = value;
     emit(paddleChangeBottomNavState());
   }
 
   List<String> title = [
-    "Home",
+    "Paddle Reservation",
     "challange",
     "Calls",
     "Chat",
@@ -65,5 +66,19 @@ class PaddleCubit extends Cubit<PaddleStates> {
     }).catchError((err) {
       emit(paddleErrorState(err));
     });
+  }
+
+  bool isDark = false;
+
+  void changeMode({bool? fromShared}) {
+    if (fromShared != null) {
+      isDark = fromShared;
+      emit(paddleChangeModeState());
+    } else {
+      isDark = !isDark;
+      sharedPref.saveData(key: "isDark", value: isDark).then((value) {
+        emit(paddleChangeModeState());
+      });
+    }
   }
 }

@@ -38,6 +38,13 @@ class HomeLayout extends StatelessWidget {
                       });
                     },
                     icon: Icon(Icons.search)),
+                IconButton(
+                  onPressed: () {
+                    //  navigate(context, Search());
+                    PaddleCubit.get(context).changeMode();
+                  },
+                  icon: Icon(Icons.brightness_4_outlined),
+                ),
                 SizedBox(
                   width: 12,
                 ),

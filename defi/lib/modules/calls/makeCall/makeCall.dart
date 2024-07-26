@@ -1,4 +1,3 @@
-import 'package:defi/shared/component/component.dart';
 import 'package:flutter/material.dart';
 
 class MakeCall extends StatelessWidget {

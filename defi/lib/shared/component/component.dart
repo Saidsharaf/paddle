@@ -21,6 +21,7 @@ Widget defultFormField({
         obscureText: isScure,
         style:const TextStyle(
           fontSize: 13,
+          color: Colors.black, //! check it again
         ),
         onTap: onTap,
         onFieldSubmitted: onSumbmit,
@@ -32,7 +33,7 @@ Widget defultFormField({
           return null;
         },
         decoration: InputDecoration(
-          labelStyle:const TextStyle(color: Colors.black),
+          labelStyle:const TextStyle(color: Colors.black,),
           focusedBorder: OutlineInputBorder(
             borderSide:const BorderSide(color: Colors.grey),
             borderRadius: BorderRadius.circular(20),

@@ -8,3 +8,6 @@ class paddleErrorState extends PaddleStates {
   paddleErrorState(this.error);
 }
 class paddleChangeBottomNavState extends PaddleStates {}
+
+
+class paddleChangeModeState extends PaddleStates {}
