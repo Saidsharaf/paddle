@@ -11,3 +11,11 @@ class paddleChangeBottomNavState extends PaddleStates {}
 
 
 class paddleChangeModeState extends PaddleStates {}
+
+
+
+class paddleProfilePickerSuccessState extends PaddleStates {}
+class paddleProfilePickerErrorState extends PaddleStates {}
+
+class paddlecoverPickerSuccessState extends PaddleStates {}
+class paddlecoverPickerErrorState extends PaddleStates {}

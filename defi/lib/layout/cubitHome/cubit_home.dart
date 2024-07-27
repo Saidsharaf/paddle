@@ -1,15 +1,18 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:defi/layout/cubitHome/state_home.dart';
 import 'package:defi/models/usersModel/UsersModel.dart';
 import 'package:defi/modules/calls/calls.dart';
 import 'package:defi/modules/chat/chat.dart';
 import 'package:defi/modules/home/home.dart';
+import 'package:defi/modules/challenges/challenges.dart';
 import 'package:defi/modules/profile/profile.dart';
-import 'package:defi/modules/setting/setting.dart';
 import 'package:defi/shared/component/constants.dart';
 import 'package:defi/shared/network/local/sharedPref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PaddleCubit extends Cubit<PaddleStates> {
   PaddleCubit() : super(paddleInitialState());
@@ -17,7 +20,7 @@ class PaddleCubit extends Cubit<PaddleStates> {
 
   int currentIndex = 0;
 
-  List<Widget> screens = [Home(), Challange(), Calls(), Chat(), Setting()];
+  List<Widget> screens = [Home(), Challange(), Calls(), Chat(), Profile()];
   void changeNav(int value) {
     currentIndex = value;
     emit(paddleChangeBottomNavState());
@@ -28,7 +31,7 @@ class PaddleCubit extends Cubit<PaddleStates> {
     "challange",
     "Calls",
     "Chat",
-    "Setting",
+    "Profile",
   ];
 
   List<Icon> itemIcons = [
@@ -49,7 +52,7 @@ class PaddleCubit extends Cubit<PaddleStates> {
       color: Colors.white,
     ),
     Icon(
-      Icons.settings,
+      Icons.person,
       color: Colors.white,
     ),
   ];
@@ -79,6 +82,45 @@ class PaddleCubit extends Cubit<PaddleStates> {
       sharedPref.saveData(key: "isDark", value: isDark).then((value) {
         emit(paddleChangeModeState());
       });
+    }
+  }
+
+  final ImagePicker imagePicker = ImagePicker();
+  XFile? coverImage;
+
+  void getCoverPicker() async {
+    try {
+      coverImage = await imagePicker.pickImage(source: ImageSource.gallery);
+      if (coverImage!.path.toString().isNotEmpty) {
+        emit(paddlecoverPickerSuccessState());
+      }
+    } catch (e) {}
+  }
+
+  XFile? profileImage;
+
+  void getProfilePicker() async {
+    try {
+      profileImage = await imagePicker.pickImage(source: ImageSource.gallery);
+      if (profileImage!.path.toString().isNotEmpty) {
+        emit(paddleProfilePickerSuccessState());
+      }
+    } catch (e) {}
+  }
+
+  File? pd;
+  final ImagePicker imagedPicker = ImagePicker();
+
+  void getPdPicker() async {
+    try {
+      final XFile? pickedImage =
+          await imagedPicker.pickImage(source: ImageSource.gallery);
+      if (pickedImage != null && pickedImage.path.isNotEmpty) {
+        pd = File(pickedImage.path);
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error picking image: $e');
     }
   }
 }
