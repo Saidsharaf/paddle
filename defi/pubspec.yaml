@@ -79,6 +79,7 @@ dependencies:
   firebase_core: ^2.27.0
   firebase_auth: ^4.17.8
   cloud_firestore: ^4.15.8
+  firebase_storage: ^11.7.7
   #zegocall
   zego_uikit_prebuilt_call: ^4.9.0
   zego_uikit_signaling_plugin: ^2.8.2

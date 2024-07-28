@@ -16,17 +16,41 @@ class EditProfile extends StatelessWidget {
       builder: (context, state) {
         var userModel = PaddleCubit.get(context).usersModel;
         var coverImage = PaddleCubit.get(context).coverImage;
+        var ProfileImage = PaddleCubit.get(context).profileImage;
         var nameController = TextEditingController();
         var bioController = TextEditingController();
 
         nameController.text = userModel!.name!;
         bioController.text = userModel.bio!;
         return Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            actions: [
+              TextButton(
+                onPressed: () {
+                  PaddleCubit.get(context).updateInfoUser(
+                      bio: bioController.text, name: nameController.text);
+                },
+                child: Text("Update",style: TextStyle(
+                  color:  Color.fromARGB(255, 0, 151, 178),
+                ),),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+            ],
+          ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
+                if (state is paddleUpdateUserLoadingState)
+                  LinearProgressIndicator(
+                    color: Color.fromARGB(255, 0, 151, 178),
+                  ),
+                if (state is paddleUpdateUserLoadingState)
+                  SizedBox(
+                    height: 5,
+                  ),
                 Container(
                   height: 195,
                   child: Stack(
@@ -47,7 +71,10 @@ class EditProfile extends StatelessWidget {
                                         "https://img.freepik.com/free-photo/young-female-suffering-from-toothache-shirt-skirt-looking-painful_176474-24446.jpg?t=st=1722030467~exp=1722034067~hmac=2d6118395da2dd4aed1a8e12d05e8abcd74a795de344c9a041ff1c10f56e8cb5&w=740",
                                         fit: BoxFit.cover,
                                       )
-                                    : Image.file(File(coverImage.path),fit: BoxFit.cover,),
+                                    : Image.file(
+                                        File(coverImage.path),
+                                        fit: BoxFit.cover,
+                                      ),
                                 // decoration: BoxDecoration(
                                 //   borderRadius: BorderRadius.circular(4),
                                 //   // image: DecorationImage(
@@ -82,16 +109,22 @@ class EditProfile extends StatelessWidget {
                             backgroundColor:
                                 Theme.of(context).scaffoldBackgroundColor,
                             child: CircleAvatar(
-                              radius: 60,
-                              backgroundImage: NetworkImage(
-                                  "https://img.freepik.com/free-photo/close-up-portrait-cheerful-glamour-girl-with-cute-make-up-smiling-white-teeth-looking-happy-camera-standing-blue-background_1258-70300.jpg?t=st=1722029166~exp=1722032766~hmac=18801d6daffe1934bb76c8bfc5de7ab0c058bbe36accc8173d2a7cabd3d70c0d&w=740"),
-                            ),
+                                radius: 60,
+                                backgroundImage: ProfileImage == null
+                                    ? NetworkImage(
+                                        "https://img.freepik.com/free-photo/close-up-portrait-cheerful-glamour-girl-with-cute-make-up-smiling-white-teeth-looking-happy-camera-standing-blue-background_1258-70300.jpg?t=st=1722029166~exp=1722032766~hmac=18801d6daffe1934bb76c8bfc5de7ab0c058bbe36accc8173d2a7cabd3d70c0d&w=740",
+                                      )
+                                    : FileImage(
+                                        File(ProfileImage.path),
+                                      ) as ImageProvider),
                           ),
                           CircleAvatar(
                             radius: 17,
                             backgroundColor: Color.fromARGB(255, 0, 151, 178),
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                PaddleCubit.get(context).getProfilePicker();
+                              },
                               icon: Icon(Icons.edit),
                               iconSize: 18,
                               color: Colors.white,

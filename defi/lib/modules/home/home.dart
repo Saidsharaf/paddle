@@ -37,7 +37,7 @@ class Home extends StatelessWidget {
             height: 5,
           ),
           Container(
-            height: 90,
+            height: 100,
             child: DatePicker(
               DateTime.now(),
               onDateChange: (selectedDate) {

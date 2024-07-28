@@ -69,4 +69,6 @@ class RegisterCubit extends Cubit<RegisterStates> {
     selectedValue = value;
     emit(registerChangeShowPassState());
   }
+
+   
 }

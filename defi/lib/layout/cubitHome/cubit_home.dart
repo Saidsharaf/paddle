@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:defi/layout/cubitHome/state_home.dart';
 import 'package:defi/models/usersModel/UsersModel.dart';
@@ -13,6 +12,7 @@ import 'package:defi/shared/network/local/sharedPref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class PaddleCubit extends Cubit<PaddleStates> {
   PaddleCubit() : super(paddleInitialState());
@@ -103,24 +103,96 @@ class PaddleCubit extends Cubit<PaddleStates> {
     try {
       profileImage = await imagePicker.pickImage(source: ImageSource.gallery);
       if (profileImage!.path.toString().isNotEmpty) {
+        print(profileImage!.path);
         emit(paddleProfilePickerSuccessState());
       }
     } catch (e) {}
   }
 
-  File? pd;
-  final ImagePicker imagedPicker = ImagePicker();
+  ///data/user/0/com.example.defi/cache/999b3a3b-1993-45c2-bd2c-aa3751be4199/images.jpg
+  // void uploadProfileImage() {
+  //   firebase_storage.FirebaseStorage.instance
+  //       .ref()
+  //       .child("users/${Uri.file(profileImage!.path).pathSegments.last}")
+  //       .putFile(File(profileImage!.path))
+  //       .then((value) {
+  //     value.ref.getDownloadURL().then((value) {
+  //       print("--------");
+  //       print(value);
+  //     }).catchError((err) {});
+  //   }).catchError((err) {});
+  // }
 
-  void getPdPicker() async {
+  String profileImageUrl = "";
+  void uploadProfileImage() async {
+    if (profileImage == null) return;
+
+    emit(paddleProfileUploadLoadingState());
     try {
-      final XFile? pickedImage =
-          await imagedPicker.pickImage(source: ImageSource.gallery);
-      if (pickedImage != null && pickedImage.path.isNotEmpty) {
-        pd = File(pickedImage.path);
-      }
+      final storageRef = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child("users/${Uri.file(profileImage!.path).pathSegments.last}");
+      final uploadTask = storageRef.putFile(File(profileImage!.path));
+      final taskSnapshot = await uploadTask;
+      final downloadURL = await taskSnapshot.ref.getDownloadURL();
+      profileImageUrl = downloadURL;
+      print("Profile image uploaded successfully: $downloadURL");
+      emit(paddleProfileUploadSuccessState(downloadURL));
     } catch (e) {
-      // Handle any errors that occur
-      print('Error picking image: $e');
+      print("Error uploading profile image: $e");
+      emit(paddleProfileUploadErrorState(e.toString()));
+    }
+  }
+
+  String coverImageUrl = "";
+  void uploadCoverImage() async {
+    if (coverImage == null) return;
+
+    emit(paddleCoverUploadLoadingState());
+    try {
+      final storageRef = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child("users/${Uri.file(coverImage!.path).pathSegments.last}");
+      final uploadTask = storageRef.putFile(File(coverImage!.path));
+      final taskSnapshot = await uploadTask;
+      final downloadURL = await taskSnapshot.ref.getDownloadURL();
+      coverImageUrl = downloadURL;
+      print("Profile image uploaded successfully: $downloadURL");
+      emit(paddleCoverUploadSuccessState(downloadURL));
+    } catch (e) {
+      print("Error uploading profile image: $e");
+      emit(paddleCoverUploadErrorState(e.toString()));
+    }
+  }
+
+  void updateInfoUser({
+    @required String? name,
+    @required String? bio,
+  }) {
+    emit(paddleUpdateUserLoadingState());
+    if (coverImage != null) {
+      uploadCoverImage();
+    } else if (profileImage != null) {
+      uploadProfileImage();
+    } else {
+      UsersModel model = UsersModel(
+        name: name,
+        bio: bio,
+        cover: usersModel!.cover,
+        profileImage: usersModel!.profileImage,
+        uId: uId,
+        email: usersModel!.email,
+        isEmailVerified: false,
+      );
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(usersModel!.uId)
+          .update(model.toMap())
+          .then((value) {
+        getUser();
+      }).catchError((onError) {
+        emit(paddleUpdateUserErrorState());
+      });
     }
   }
 }
