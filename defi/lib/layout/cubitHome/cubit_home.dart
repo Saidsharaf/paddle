@@ -123,8 +123,10 @@ class PaddleCubit extends Cubit<PaddleStates> {
   //   }).catchError((err) {});
   // }
 
-  String profileImageUrl = "";
-  void uploadProfileImage() async {
+  void uploadProfileImage({
+    @required String? name,
+    @required String? bio,
+  }) async {
     if (profileImage == null) return;
 
     emit(paddleProfileUploadLoadingState());
@@ -135,7 +137,7 @@ class PaddleCubit extends Cubit<PaddleStates> {
       final uploadTask = storageRef.putFile(File(profileImage!.path));
       final taskSnapshot = await uploadTask;
       final downloadURL = await taskSnapshot.ref.getDownloadURL();
-      profileImageUrl = downloadURL;
+      updateInfoUser(name: name, bio: bio, image: downloadURL);
       print("Profile image uploaded successfully: $downloadURL");
       emit(paddleProfileUploadSuccessState(downloadURL));
     } catch (e) {
@@ -144,8 +146,10 @@ class PaddleCubit extends Cubit<PaddleStates> {
     }
   }
 
-  String coverImageUrl = "";
-  void uploadCoverImage() async {
+  void uploadCoverImage({
+    @required String? name,
+    @required String? bio,
+  }) async {
     if (coverImage == null) return;
 
     emit(paddleCoverUploadLoadingState());
@@ -156,9 +160,9 @@ class PaddleCubit extends Cubit<PaddleStates> {
       final uploadTask = storageRef.putFile(File(coverImage!.path));
       final taskSnapshot = await uploadTask;
       final downloadURL = await taskSnapshot.ref.getDownloadURL();
-      coverImageUrl = downloadURL;
+      updateInfoUser(name: name, bio: bio, cover: downloadURL);
       print("Profile image uploaded successfully: $downloadURL");
-      emit(paddleCoverUploadSuccessState(downloadURL));
+       emit(paddleCoverUploadSuccessState(downloadURL));
     } catch (e) {
       print("Error uploading profile image: $e");
       emit(paddleCoverUploadErrorState(e.toString()));
@@ -168,18 +172,16 @@ class PaddleCubit extends Cubit<PaddleStates> {
   void updateInfoUser({
     @required String? name,
     @required String? bio,
+    String? image,
+    String? cover,
   }) {
     emit(paddleUpdateUserLoadingState());
-    if (coverImage != null) {
-      uploadCoverImage();
-    } else if (profileImage != null) {
-      uploadProfileImage();
-    } else {
+  
       UsersModel model = UsersModel(
         name: name,
         bio: bio,
-        cover: usersModel!.cover,
-        profileImage: usersModel!.profileImage,
+        cover: cover ?? usersModel!.cover,
+        profileImage: image ?? usersModel!.profileImage,
         uId: uId,
         email: usersModel!.email,
         isEmailVerified: false,
@@ -193,6 +195,5 @@ class PaddleCubit extends Cubit<PaddleStates> {
       }).catchError((onError) {
         emit(paddleUpdateUserErrorState());
       });
-    }
   }
 }

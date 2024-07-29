@@ -13,13 +13,14 @@ Widget defultFormField({
   VoidCallback? onTap,
   void Function(String)? onChange,
   void Function(String)? onSumbmit,
-}) => SizedBox(
+}) =>
+    SizedBox(
       height: 85,
       child: TextFormField(
         controller: controller,
         keyboardType: type,
         obscureText: isScure,
-        style:const TextStyle(
+        style: const TextStyle(
           fontSize: 13,
           color: Colors.black, //! check it again
         ),
@@ -33,9 +34,11 @@ Widget defultFormField({
           return null;
         },
         decoration: InputDecoration(
-          labelStyle:const TextStyle(color: Colors.black,),
+          labelStyle: const TextStyle(
+            color: Colors.black,
+          ),
           focusedBorder: OutlineInputBorder(
-            borderSide:const BorderSide(color: Colors.grey),
+            borderSide: const BorderSide(color: Colors.grey),
             borderRadius: BorderRadius.circular(20),
           ),
           border: OutlineInputBorder(
@@ -68,20 +71,19 @@ void navigate(context, Widget) => Navigator.push(
       MaterialPageRoute(builder: (context) => Widget),
     );
 
-    void showToast({
+void showToast({
   @required String? msg,
   @required toastStates? state,
 }) {
   Fluttertoast.showToast(
-      msg: msg!,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 5,
-      backgroundColor: chooseToastColor(state!),
-      textColor: Colors.white,
-      fontSize: 13.0,
-
-      );
+    msg: msg!,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 5,
+    backgroundColor: chooseToastColor(state!),
+    textColor: Colors.white,
+    fontSize: 13.0,
+  );
 }
 
 enum toastStates { SUCCESS, WARNING, ERROR }
@@ -100,4 +102,42 @@ Color chooseToastColor(toastStates state) {
       break;
   }
   return color;
+}
+
+Widget buildBtn({
+  @required String? text,
+  @required VoidCallback? onTap,
+}) {
+  return Container(
+    height: 45,
+    padding: EdgeInsets.only(
+      top: 2,
+      left: 3,
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(50),
+      border: Border(
+        bottom: BorderSide(color: Colors.black),
+        top: BorderSide(color: Colors.black),
+        left: BorderSide(color: Colors.black),
+        right: BorderSide(color: Colors.black),
+      ),
+    ),
+    child: MaterialButton(
+      onPressed: onTap,
+      minWidth: double.infinity,
+      height: 25,
+      color: Color.fromARGB(255, 0, 151, 178),
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+      child: Text(
+        text!,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
+  );
 }

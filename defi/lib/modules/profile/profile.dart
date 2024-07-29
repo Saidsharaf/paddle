@@ -33,7 +33,7 @@ class Profile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                           image: DecorationImage(
                             image: NetworkImage(
-                              "https://img.freepik.com/free-photo/young-female-suffering-from-toothache-shirt-skirt-looking-painful_176474-24446.jpg?t=st=1722030467~exp=1722034067~hmac=2d6118395da2dd4aed1a8e12d05e8abcd74a795de344c9a041ff1c10f56e8cb5&w=740",
+                              PaddleCubit.get(context).usersModel!.cover!,
                             ),
                             fit: BoxFit.cover,
                           ),
@@ -47,7 +47,7 @@ class Profile extends StatelessWidget {
                       child: CircleAvatar(
                         radius: 60,
                         backgroundImage: NetworkImage(
-                            "https://img.freepik.com/free-photo/close-up-portrait-cheerful-glamour-girl-with-cute-make-up-smiling-white-teeth-looking-happy-camera-standing-blue-background_1258-70300.jpg?t=st=1722029166~exp=1722032766~hmac=18801d6daffe1934bb76c8bfc5de7ab0c058bbe36accc8173d2a7cabd3d70c0d&w=740"),
+                            PaddleCubit.get(context).usersModel!.profileImage!),
                       ),
                     ),
                   ],
